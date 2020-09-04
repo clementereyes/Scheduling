@@ -1,0 +1,66 @@
+<!--
+https://stackoverflow.com/questions/46420811/html-table-borders-not-printed-on-the-second-page-firefox-only
+https://stackoverflow.com/questions/15550206/javascript-run-a-function-every-quarter-hour-at-00-15-30-45
+-->
+<html><head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> Daily Planner </title>
+<style type="text/css">
+        table { border-collapse:initial; 
+            width: 100%;
+			/*table-layout: auto;
+			width: 180px;*/} 
+        th, td { text-align: left; 
+            padding: 4px;} 
+        tr:nth-child(even) { 
+            background-color: white; }
+        tr:nth-child(odd) { 
+            background-color: white;}
+		tr.strikeout td:before {  
+			content: " ";  
+			position: absolute;  
+			display: inline-block;  
+			padding: 5px 10px;  
+			left: 10;  
+			border-bottom: 3px solid #111;  
+			width: 60%; }
+    p { white-space:nowrap}
+</style></head><body> 
+<script type="text/javascript">
+var fileName = location.href.split("/").slice(-1); 
+var startDate = new Date("2020-07-06 05:00");
+var endDate = new Date("2020-07-06 14:30"); 
+var getDateArray = function(start, end) {
+    var arr = new Array();
+    var dt = new Date(start.getTime());
+    while (dt <= end) {
+        arr.push(new Date(dt));
+        dt.setHours(dt.getHours(), dt.getMinutes() + 15);}
+    return arr;}
+function circularArrayRotation(grparr, k){
+   //Perform the operations k times
+    for(let i = 0; i < k; i++){
+        grparr.push(grparr.shift());}    
+    return grparr;}
+var options = { hour: '2-digit', minute: '2-digit', hour12: false};
+var dateArr = getDateArray(startDate, endDate);
+var drivers = [ "", "", "", "", "", "","","", "" ];
+var today = new Date();
+// Output
+//document.write("<h2 style='text-align: center;'><font color='blue'> Daily Planner</font></h2>");
+//document.write("<p><font color='red'> Start Date:</font> " + startDate + "</p>");
+//document.write("<p><font color='red'>End Date:</font> " + endDate + "</p>");
+document.write('<table bordercolor="black" border="1" cellpadding="0" cellspacing="0" cols="2" >');
+document.write('<th style="text-align:center;" colspan="3">Daily Planner</th>')
+document.write("<tr><td nowrap colspan='3'><font size='3'>Date printed: " + today + "</font></td></tr>");
+document.write('<tr><td style="text-align:center;" >Time</td><td style="text-align:center;" >Task</td><td style="text-align:center;" nowrap ><font size=2>Comment</font></td></tr>');
+for (var i = 0; i < dateArr.length; i++){
+	  document.write("<tr>");
+      document.write('<td align="center" nowrap >' + (dateArr[i].toLocaleTimeString("en-US", options)) + "</td>");
+	  document.write("<td nowrap >" + circularArrayRotation(drivers,9)[i%circularArrayRotation(drivers,9).length] + "</td>");
+	  document.write('<td><input value="" type="text" size="10"></td>');
+	  document.write("</tr>");}
+document.write("</table>");
+document.write("<pre nowrap >Built by:");
+document.write( fileName + "</pre>");
+</script></body></html>
